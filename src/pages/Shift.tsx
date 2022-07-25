@@ -5,7 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { getErrorMessage } from "../helper/error/index";
 import { deleteShiftById, getWeeklyShifts} from "../helper/api/shift";
-import { getWeekData } from "../helper/api/week";
+import { executePublishWeek, getWeekData } from "../helper/api/week";
 import DataTable from "react-data-table-component";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -93,6 +93,10 @@ const Shift = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
+  const [showPublishConfirm, setShowPublishConfirm] = useState<boolean>(false);
+  const [publishLoading, setPublishLoading] = useState<boolean>(false);
+
+
   const [weekPublished, setWeekPublished] = useState<boolean>(false);
 
 
@@ -129,10 +133,18 @@ const Shift = () => {
     setShowDeleteConfirm(true);
   };
 
+  const onPublishClick = ()=>{
+    setShowPublishConfirm(true)
+  }
+
   const onCloseDeleteDialog = () => {
     setSelectedId(null);
     setShowDeleteConfirm(false);
   };
+
+  const onClosePublishDialog = ()=>{
+    setShowPublishConfirm(false);
+  }
   
    const getData = async () => {
       try {
@@ -216,6 +228,27 @@ const Shift = () => {
     }
   };
 
+  const publishWeek = async () =>{
+    try{
+      setErrMsg("");
+
+      const payload = {
+        startDate: weekStartDate.toISOString().split("T")[0],
+        endDate:  weekEndDate.toISOString().split("T")[0]
+      };
+
+      await executePublishWeek(payload)
+
+      getData()
+    } catch (error) {
+      const message = getErrorMessage(error);
+      setErrMsg(message);
+    } finally {
+      setPublishLoading(false);
+      onClosePublishDialog();
+    }
+  }
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -286,6 +319,15 @@ const Shift = () => {
         open={showDeleteConfirm}
         onYes={deleteDataById}
         loading={deleteLoading}
+      />
+
+      <ConfirmDialog
+        title="Publish Confirmation"
+        description={`Do you want to publish this week's shift ?`}
+        onClose={onClosePublishDialog}
+        open={showPublishConfirm}
+        onYes={publishWeek}
+        loading={publishLoading}
       />
     </Grid>
   );
