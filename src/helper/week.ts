@@ -31,3 +31,16 @@ export const getWeekBoundariesDate =()=>{
     
     return {start:startWeek, end:endWeek}
 }
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+
+const getMonthName = (date:Date)=>{
+    return monthNames[date.getMonth()]
+}
+
+export const parseWeekPickerDate = (date:Date) => {
+    return `${getMonthName(date)} ${date.toISOString().split("T")[0].split("-")[2]}`
+}
