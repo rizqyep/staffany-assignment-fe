@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 import ConfirmDialog from "../components/ConfirmDialog";
 import Alert from "@material-ui/lab/Alert";
 import { Link as RouterLink } from "react-router-dom";
-import { getWeekBoundariesDate, parseWeekPickerDate } from "../helper/week";
+import { getWeekBoundariesDate, parseWeekPickerDate, prettyDate } from "../helper/week";
 import { Box, Button, Typography } from "@material-ui/core";
 import { WeekPicker } from "../components/WeekPicker";
 import { CheckCircleOutline } from "@material-ui/icons";
@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight:30,
     color:theme.color.turqouise,
     fontSize:14
+   },
+   publishedNoticeText:{
+    marginLeft:10
    }
 }));
 
@@ -271,7 +274,7 @@ const Shift = () => {
                     {weekPublished 
                                   ? 
                                 <Typography variant="subtitle1" className={classes.wrapIcon}>
-                                  <CheckCircleOutline /> Week published on ${weekData.createdAt}
+                                  <CheckCircleOutline/> <span className={classes.publishedNoticeText}> Week published on {prettyDate(weekData.createdAt)} </span>
                                 </Typography>
                                   : 
                                   null
@@ -288,6 +291,7 @@ const Shift = () => {
                       variant="contained" 
                       className={classes.publishBtn}
                       disabled={weekPublished}
+                      onClick={()=>{onPublishClick()}}
                     >
                         PUBLISH
                     </Button>
