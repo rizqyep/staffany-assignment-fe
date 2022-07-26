@@ -313,6 +313,7 @@ const Shift = () => {
         aria-label="add"
         className={classes.fab}
         onClick={() => history.push("/shift/add")}
+        disabled={weekPublished}
       >
         <AddIcon />
       </Fab>

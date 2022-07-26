@@ -46,15 +46,15 @@ export const parseWeekPickerDate = (date:Date) => {
 }
 
 export const prettyDate = (date:string) => {
+    let localDate = new Date(date).toString();
     const monthName = getMonthName(new Date(date));
-    const dateOnly = date.split("T")[0].split("-")
-    const day = dateOnly[2];
-    const year = dateOnly[0];
-    const timeOnly = date.split("T")[1].split(".")[0].split(":")
+    const year = localDate.split(" ")[3]
+    const day = localDate.split(" ")[2]
+    const timeOnly = localDate.split(" ")[4].split(":")
     const hour = timeOnly[0];
     const minute = timeOnly[1];
 
     const prefix = parseInt(hour) > 12 ? "PM" : "AM";
 
-    return `${monthName} ${day} ${year} at ${hour}:${minute} ${prefix}`
+    return `${monthName} ${day} ${year} ${hour}:${minute} ${prefix}`
 }
